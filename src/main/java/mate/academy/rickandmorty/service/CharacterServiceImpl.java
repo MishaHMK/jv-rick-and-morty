@@ -33,7 +33,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public CharacterBiographyDto findById(Long id) {
         Character character = characterRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find book by id " + id)
+                () -> new EntityNotFoundException("Can't find character by id " + id)
         );
         return characterMapper.toBiographyDto(character);
     }

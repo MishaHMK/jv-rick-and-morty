@@ -24,16 +24,12 @@ public class Character {
     @Column(nullable = false)
     private String name;
 
-    @Column()
     private String status;
 
-    @Column()
     private String species;
 
-    @Column()
     private String gender;
 
-    @Column()
     private String image;
 
     @Column(unique = true)
