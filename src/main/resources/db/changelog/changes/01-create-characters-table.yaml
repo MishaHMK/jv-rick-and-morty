@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-characters-table
+      author: rick_morty
+      runOnChange: true
+      changes:
+        - createTable:
+            tableName: characters
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: external_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(255)
+              - column:
+                  name: species
+                  type: varchar(255)
+              - column:
+                  name: gender
+                  type: varchar(255)
+              - column:
+                  name: image
+                  type: varchar(255)
+              - column:
+                  name: url
+                  type: varchar(255)
+                  constraints:
+                    unique: true
