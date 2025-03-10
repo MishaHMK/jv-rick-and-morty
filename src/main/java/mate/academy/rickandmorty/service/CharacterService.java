@@ -4,7 +4,10 @@ import java.util.List;
 import mate.academy.rickandmorty.dto.internal.CharacterBiographyDto;
 
 public interface CharacterService {
-    List<CharacterBiographyDto> findAll(String name);
+    List<CharacterBiographyDto> findAllByName(String name);
+
+    List<CharacterBiographyDto> findAll();
 
     CharacterBiographyDto findById(Long id);
+
 }

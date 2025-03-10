@@ -9,13 +9,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.external.CharacterResponseDto;
 import mate.academy.rickandmorty.mapper.CharacterMapper;
 import mate.academy.rickandmorty.model.Character;
 import mate.academy.rickandmorty.repository.character.CharacterRepository;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,26 +35,24 @@ public class CharactersClientImpl implements CharactersClient {
             HttpResponse<String> response = httpClient
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
             ObjectMapper objectMapper = new ObjectMapper();
-            CharacterResponseDto responseDtos = objectMapper.readValue(response.body(),
+            CharacterResponseDto responseData = objectMapper.readValue(response.body(),
                     new TypeReference<>(){}
             );
-            List<Character> characters = responseDtos.results().stream()
+            List<Character> charactersToCreate = responseData.results().stream()
                     .map(characterMapper::toCharacter)
-                    .collect(Collectors.toList());
-
-            characterRepository.saveAll(characters);
-            System.out.println("Success!");
+                    .peek(c -> c.setId(null))
+                    .toList();
+            characterRepository.saveAll(charactersToCreate);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Fetching or saving characters "
                     + "from Rick&MortyAPI failed", e);
-        } catch (ObjectOptimisticLockingFailureException ex) {
-            System.out.println("Optimistic locking failure. Retrying...");
         }
     }
 
-   /* @PostConstruct
+   @PostConstruct
     public void init() {
-        System.out.println("Fetching and saving characters on startup...");
-        fetchAndSaveCharacters();
-    }*/
+        if (characterRepository.count() == 0) {
+            fetchAndSaveCharacters();
+        }
+    }
 }

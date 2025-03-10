@@ -3,6 +3,8 @@ package mate.academy.rickandmorty.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.internal.CharacterBiographyDto;
 import mate.academy.rickandmorty.service.CharacterService;
@@ -19,12 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class CharacterController {
     private final CharacterService characterService;
 
-    @GetMapping
+    @GetMapping("/search")
     @Operation(summary = "Get all characters",
             description = "Get all character biographies with "
-                    + "optional name filtering")
-    public List<CharacterBiographyDto> getAll(@ParameterObject String name) {
-        return characterService.findAll(name);
+                    + " name filtering")
+    public List<CharacterBiographyDto> getAllByName(
+            @ParameterObject String name) {
+        return characterService.findAllByName(name);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all characters",
+            description = "Get all character biographies")
+    public List<CharacterBiographyDto> getAll() {
+        return characterService.findAll();
     }
 
     @GetMapping("/{id}")

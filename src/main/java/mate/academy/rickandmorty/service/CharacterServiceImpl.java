@@ -1,6 +1,8 @@
 package mate.academy.rickandmorty.service;
 
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.internal.CharacterBiographyDto;
 import mate.academy.rickandmorty.exception.EntityNotFoundException;
@@ -16,19 +18,21 @@ public class CharacterServiceImpl implements CharacterService {
     private final CharacterMapper characterMapper;
 
     @Override
-    public List<CharacterBiographyDto> findAll(String name) {
-        if (name == null || name.isEmpty()) {
-            return characterRepository.findAll()
-                    .stream()
-                    .map(characterMapper::toBiographyDto)
-                    .toList();
-        } else {
-            return characterRepository.findByNameContainingIgnoreCase(name)
-                    .stream()
-                    .map(characterMapper::toBiographyDto)
-                    .toList();
-        }
+    public List<CharacterBiographyDto> findAllByName(String name) {
+        return characterRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(characterMapper::toBiographyDto)
+                .toList();
     }
+
+    @Override
+    public List<CharacterBiographyDto> findAll() {
+        return characterRepository.findAll()
+                .stream()
+                .map(characterMapper::toBiographyDto)
+                .toList();
+    }
+
 
     @Override
     public CharacterBiographyDto findById(Long id) {
